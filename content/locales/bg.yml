@@ -1,0 +1,273 @@
+bg:
+  # You can add additional locale definitions in here if you need to
+  # override anything.
+
+  maintenance_statuses:
+    active: "В процес на извършване"
+    closed: "Приключено"
+    upcoming: "Предстои"
+
+  issue_statuses:
+    investigating: "Разследване"
+    identified: "Идентифициран"
+    monitoring: "Наблюдение"
+    resolved: "Разрешен"
+
+  service_statuses:
+    operational: "Работи безпроблемно"
+    degraded_performance: "Влошена производителност"
+    partial_outage: "Частично прекъсване"
+    major_outage: "Недостъпна"
+    maintenance: "Профилактика"
+
+
+  service_status_types:
+    ok: OK - everything is working as it should be
+    minor: Minor Issue - there are some issues but not affecting the whole service
+    major: Major Issues - a complete service outage affecting all users
+    maintenance: Maintenance - the service is currently undergoing planned maintenance
+
+  email_templates:
+    subscribed:
+      name: Subscription Confirmation Message
+      default_subject: "Confirm your subscription to {{site.title}}"
+    new_issue:
+      name: New issue is posted
+      default_subject: "[New Issue] {{issue.title}} on {{site.title}}"
+    new_issue_update:
+      name: Issue is updated
+      default_subject: "[Updated Issue] {{issue.title}} on {{site.title}}"
+    new_maintenance:
+      name: New maintenance session is posted
+      default_subject: "[Maintenance] {{maintenance.title}} on {{site.title}}"
+    new_maintenance_update:
+      name: Maintenance session is updated
+      default_subject: "[Maintenance Update] {{maintenance.title}} on {{site.title}}"
+
+  activerecord:
+    attributes:
+      maintenance:
+        length_in_minutes: Session length
+
+  themes:
+    default:
+      last_updated: "последно обновяване"
+      opened_on: "Отворен на"
+      affected_services: "Засегнати услуги"
+      posted: "Публикуван"
+      by: "от"
+
+      due_to_start: "трабва да започне"
+      due_to_finish: "трябва да завърши"
+
+      in_for_time: "за"
+      ago: "преди"
+
+      maintenance: "Профилактика"
+
+      page_maintenance:
+        scheduled_for: "Насрочена за"
+        schedule_description: "График/план на профилактиката"
+        scheduled_start_time: "Старира на"
+        scheduled_duration: "Продължителност"
+        scheduled_status: "Текущ статус"
+        updates: "Актуализации"
+
+      page_header:
+        back_button: "Начална страница"
+      footer:
+        history: 'История на Инцидентите'
+        homepage: 'Официален сайт'
+        contact_us: 'Свържете се с нас'
+      history:
+        title: "История на Инциденти & Профилактики"
+        intro: "Тази страница, ще ви покаже информация за всички настоящи и отминали инциденти и проведени профилактики."
+
+  date:
+    formats:
+      # Use the strftime parameters for formats.
+      # When no format has been given, it uses default.
+      # You can provide other formats here if you like!
+      default: "%Y-%m-%d"
+      short: "%b %d"
+      long: "%B %d, %Y"
+
+    day_names: [Неделя, Понеделник, Вторник, Сряда, Четвъртък, Петък, Събота]
+    abbr_day_names: [Нед, Пон, Вто, Сря, Чет, Пет, Съб]
+
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, January, February, March, April, May, June, July, August, September, October, November, December]
+    abbr_month_names: [~, Яну, Фев, Мар, Апр, Май, Юни, Юли, Авг, Сеп, Окт, Ное, Дек]
+    # Used in date_select and datetime_select.
+    order:
+      - year
+      - month
+      - day
+
+  time:
+    formats:
+      default: "%a, %d %b %Y %H:%M:%S %z"
+      short: "%d %b %H:%M"
+      long: "%B %d, %Y %H:%M"
+    am: "am"
+    pm: "pm"
+
+  # Used in array.to_sentence.
+  support:
+    array:
+      words_connector: ", "
+      two_words_connector: " and "
+      last_word_connector: ", and "
+  number:
+    # Used in NumberHelper.number_to_delimited()
+    # These are also the defaults for 'currency', 'percentage', 'precision', and 'human'
+    format:
+      # Sets the separator between the units, for more precision (e.g. 1.0 / 2.0 == 0.5)
+      separator: "."
+      # Delimits thousands (e.g. 1,000,000 is a million) (always in groups of three)
+      delimiter: ","
+      # Number of decimals, behind the separator (the number 1 with a precision of 2 gives: 1.00)
+      precision: 3
+      # If set to true, precision will mean the number of significant digits instead
+      # of the number of decimal digits (1234 with precision 2 becomes 1200, 1.23543 becomes 1.2)
+      significant: false
+      # If set, the zeros after the decimal separator will always be stripped (eg.: 1.200 will be 1.2)
+      strip_insignificant_zeros: false
+
+    # Used in NumberHelper.number_to_currency()
+    currency:
+      format:
+        # Where is the currency sign? %u is the currency unit, %n the number (default: $5.00)
+        format: "%u%n"
+        unit: "$"
+        # These five are to override number.format and are optional
+        separator: "."
+        delimiter: ","
+        precision: 2
+        significant: false
+        strip_insignificant_zeros: false
+
+    # Used in NumberHelper.number_to_percentage()
+    percentage:
+      format:
+        # These five are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        # precision:
+        # significant: false
+        # strip_insignificant_zeros: false
+        format: "%n%"
+
+    # Used in NumberHelper.number_to_rounded()
+    precision:
+      format:
+        # These five are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        # precision:
+        # significant: false
+        # strip_insignificant_zeros: false
+
+    # Used in NumberHelper.number_to_human_size() and NumberHelper.number_to_human()
+    human:
+      format:
+        # These five are to override number.format and are optional
+        # separator:
+        delimiter: ""
+        precision: 3
+        significant: true
+        strip_insignificant_zeros: true
+      # Used in number_to_human_size()
+      storage_units:
+        # Storage units output formatting.
+        # %u is the storage unit, %n is the number (default: 2 MB)
+        format: "%n %u"
+        units:
+          byte:
+            one:   "Byte"
+            other: "Bytes"
+          kb: "KB"
+          mb: "MB"
+          gb: "GB"
+          tb: "TB"
+      # Used in NumberHelper.number_to_human()
+      decimal_units:
+        format: "%n %u"
+        # Decimal units output formatting
+        # By default we will only quantify some of the exponents
+        # but the commented ones might be defined or overridden
+        # by the user.
+        units:
+          # femto: Quadrillionth
+          # pico: Trillionth
+          # nano: Billionth
+          # micro: Millionth
+          # mili: Thousandth
+          # centi: Hundredth
+          # deci: Tenth
+          unit: ""
+          # ten:
+          #   one: Ten
+          #   other: Tens
+          # hundred: Hundred
+          thousand: Thousand
+          million: Million
+          billion: Billion
+          trillion: Trillion
+          quadrillion: Quadrillion
+
+  datetime:
+    distance_in_words:
+      half_a_minute: "половин минута"
+      less_than_x_seconds:
+        one:   "по-малко от секунда"
+        other: "по-малко от %{count} секунди"
+      x_seconds:
+        one:   "1 секунда"
+        other: "%{count} секунди"
+      less_than_x_minutes:
+        one:   "по-малко от минута"
+        other: "по-малко от %{count} минути"
+      x_minutes:
+        one:   "1 минута"
+        other: "%{count} минути"
+      about_x_hours:
+        one:   "около 1 час"
+        other: "около %{count} часа"
+      x_days:
+        one:   "1 ден"
+        other: "%{count} дни"
+      about_x_months:
+        one:   "около 1 месец"
+        other: "около %{count} месеца"
+      x_months:
+        one:   "1 месец"
+        other: "%{count} месеца"
+      about_x_years:
+        one:   "около 1 година"
+        other: "около %{count} години"
+      over_x_years:
+        one:   "повече от 1 година"
+        other: "повече от %{count} години"
+      almost_x_years:
+        one:   "почти 1 година"
+        other: "почти %{count} години"
+    prompts:
+      year:   "Година"
+      month:  "Месец"
+      day:    "Ден"
+      hour:   "Час"
+      minute: "Минута"
+      second: "Секунди"
+
+  helpers:
+    select:
+      # Default value for :prompt => true in FormOptionsHelper
+      prompt: "Моля избери"
+
+    # Default translation keys for submit and button FormHelper
+    submit:
+      create: 'Създай %{model}'
+      update: 'Обнови %{model}'
+      submit: 'Запази %{model}'
+

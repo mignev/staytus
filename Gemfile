@@ -18,13 +18,21 @@ gem 'rails_env_config', '~> 1'
 gem 'chronic_duration', '~> 0.10'
 gem 'datey', '~> 1.0'
 gem 'nifty-attachments'
-gem 'puma'
+# gem 'puma'
+gem 'unicorn'
 gem 'moonrope', '~> 1.3'
 gem 'florrick', '~> 1.1'
 gem 'delayed_job_active_record'
 gem 'foreman'
 gem 'redcarpet', '~> 3.2.2'
 gem 'premailer', '~> 1.8.3'
+gem 'sqlite3'
+gem 'uptimerobot'
+
+group :production do
+  gem 'dalli'
+  gem "sentry-raven"
+end
 
 group :development, :test do
   gem 'byebug'

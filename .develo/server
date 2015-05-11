@@ -1,0 +1,68 @@
+##########################################################################
+#                                                                        #
+#  This script is called when you write the command : "develo server"    #
+#  on project with installed .develo                                     #
+#                                                                        #
+#  This script is a perfect place for logic like:                        #
+#                                                                        #
+#  If you are working on Ruby on Rails project                           #
+#  | rails server                                                        #
+#                                                                        #
+#  If you are working on Django project                                  #
+#  | django-admin.py runserver 1.2.3.4:8000                              #
+#                                                                        #
+#                        And stuff like these :)                         #
+#                                                                        #
+#                                                                        #
+#               More on https://github.com/mignev/develo                 #
+#                                                                        #
+##########################################################################
+
+args=$(echo $@);
+
+APPNAME='mysqlserver'
+NAMESPACE=${MY_STARTAPP_NAMESPACE:=dev}
+DB_LOCAL_PORT=3306
+RAILS_SERVER_PORT=5000
+
+if [ ! -z "$(echo $args| grep 'stop')" ]; then
+  echo "Stop StartApp Status Rails server"
+  kill -9 $(cat tmp/pids/server.pid)
+  return 0
+fi
+
+
+
+if [ -d ~/.pow ]; then
+  echo "$RAILS_SERVER_PORT" > ~/.pow/status.startapp
+fi
+
+if [ -f ~/confs/status.conf ];
+then
+   source ~/confs/status.conf;
+else
+  __develo_startapp_mysql_helper $APPNAME $NAMESPACE $DB_LOCAL_PORT
+fi
+
+
+if [ ! -z "$(echo $args| grep 'production')" ]; then
+  echo ""
+  echo "Start Startapp Status Rails Production Server"
+  echo ""
+
+  docker rm -f startapp_status
+  eval docker run -d \
+  -e "STARTAPP_MYSQL_USER=$STARTAPP_MYSQL_USER" \
+  -e "STARTAPP_MYSQL_PASS=$STARTAPP_MYSQL_PASS" \
+  -e "STARTAPP_MYSQL_DATABASE=$STARTAPP_MYSQL_DATABASE" \
+  -e "STARTAPP_MYSQL_HOST=554a6d88ba7eea961000000d-mignev.sapp.io" \
+  -e "STARTAPP_MYSQL_PORT=62461" \
+  -e "UPTIMEROBOT_API_KEY=$UPTIMEROBOT_API_KEY" \
+  --name startapp_status -p 8015:8015 -t startapp/status
+else
+  echo ""
+  echo "Start Startapp Status Rails Devlopment Server"
+  echo ""
+
+  bundle exec foreman start -f Procfile.development -p $RAILS_SERVER_PORT
+fi

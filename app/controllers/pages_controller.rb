@@ -7,6 +7,10 @@ class PagesController < ApplicationController
     @services = Service.ordered.includes(:status, {:active_maintenances => :service_status}).to_a
     @issues = Issue.ongoing.ordered.to_a
     @maintenances = Maintenance.open.ordered.to_a
+
+    stats_client = Stats.new(ENV['UPTIMEROBOT_API_KEY'])
+    stats = stats_client.getMonitors('776814898-776816230')
+    @stats = stats['monitors']['monitor']
   end
 
   def issue

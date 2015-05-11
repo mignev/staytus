@@ -1,0 +1,169 @@
+<%#= @stats.inspect %>
+<% @page_title = 'Welcome' %>
+
+<header class='siteHeader <% if site.cover_image %>has-coverImage<% end %>' <% if site.cover_image%>style='background-image:url(<%= site.cover_image.path %>)'<% end%>>
+  <div class='container siteHeader__topmenu'>
+    <% if site.logo %>
+      <div class='siteHeader__logo'>
+        <a href="http://www.startapp.bg/" target="_blank">
+          <%= image_tag image_url('default/logo.png') %>
+        </a>
+      </div>
+    <% end %>
+
+    <div class="siteHeader__navigation">
+      <a class='siteHeader__button' href='http://blog.startapp.bg/' target="_blank">Блог</a>
+      <a class='siteHeader__button' href='http://docs.startapp.bg/' target="_blank">Документация</a>
+      <% if site.allow_subscriptions? %>
+      <a class='siteHeader__button' href='/subscribe'>запиши се за известия</a>
+      <% end %>
+    </div>
+  </div>
+</header>
+
+<% if @issues.empty? %>
+  <div class='container'>
+    <section class="ongoingIssues more-space">
+      <p class="issueBanner issueBanner--operational">
+        Всички услуги работят нормално
+      </p>
+    </section>
+  </div>
+<% end %>
+
+<div class='container'>
+  <p class='siteHeader__title'>
+    За този сайт
+    <%#= site.title %>
+  </p>
+  <p class='siteHeader__subTitle'><%= site.description %></p>
+</div>
+
+<div class='container'>
+  <% unless @issues.empty? %>
+  <section class='ongoingIssues'>
+    <% @issues.each do |issue| %>
+    <a href='/issue/<%= issue.identifier %>' class='issueBanner issueBanner--<%= issue.state %>'>
+      <p class='issueBanner__state'><%= t("issue_statuses.#{issue.state}", :default => issue.state.humanize) %></p>
+      <h2><%= issue.title %></h2>
+      <p class='issueBanner__time'><%= t("themes.default.last_updated", :default => 'last updated') %> <%= time_tag issue.updated_at %></p>
+    </a>
+    <% end %>
+  </section>
+  <% end %>
+
+  <% unless @maintenances.empty? %>
+  <section class='ongoingIssues'>
+    <% @maintenances.each do |maintenance| %>
+    <a href='/maintenance/<%= maintenance.identifier %>' class='issueBanner issueBanner--maintenance'>
+      <p class='issueBanner__state'><%= t("themes.default.maintenance", :default => 'Maintenance') %></p>
+      <h2><%= maintenance.title %></h2>
+      <% if maintenance.started? %>
+      <p class='issueBanner__time'><%= t("themes.default.due_to_finish", :default => 'due to finish') %> <%= distance_of_time_in_words_to_now_with_direction maintenance.finish_at %></p>
+      <% else %>
+      <p class='issueBanner__time'><%= t("themes.default.due_to_start", :default => 'due to start') %> <%= distance_of_time_in_words_to_now_with_direction maintenance.start_at %></p>
+      <% end %>
+
+    </a>
+    <% end %>
+  </section>
+  <% end %>
+
+  <ul class='serviceList'>
+    <% for service in @services %>
+    <li class='serviceList__item'>
+      <p class='serviceList__status'><%= service_status_tag service %></p>
+      <p class='serviceList__name'>
+        <%= service.name %>
+        <% unless service.description.blank? %>
+        <span class='serviceList__description' data-tooltip="<%= service.description %>"><%= service.description %></span>
+        <% end %>
+      </p>
+    </li>
+    <% end %>
+  </ul>
+
+  <br/><br/><br/>
+
+  <div class='container'>
+    <p class='siteHeader__title'>
+      Графики и статистики
+    </p>
+    <br/>
+
+    <div class="graphs">
+      <h2>API - Време за отговор (from outside BG)</h2>
+      <div id="api_responsetime" style="height: 250px;"></div>
+    </div>
+
+    <div class="graphs">
+      <h2>Apps / Admin Panel - Време за отговор (from outside BG)</h2>
+      <div id="apps_responsetime" style="height: 250px;"></div>
+    </div>
+  </div>
+
+
+  <style type="text/css">
+    .graphs {
+      padding: 10px;
+      border: solid 1px #ccc;
+      border-radius: 4px;
+      margin-bottom: 40px;
+    }
+
+    .graphs h2 {
+      font-size: 18px;
+      /*border-bottom: solid 1px #ccc;*/
+      margin: 10px 0 10px;
+      padding-left: 10px;
+      color: #666;
+    }
+  </style>
+
+  <script>
+
+    function datetime_format(d) {
+      var newdate = new Date(d),
+        day=newdate.getDate(),
+        month=newdate.getMonth(),
+        month=month+1;
+
+      if((String(day)).length==1)
+        day='0'+day;
+
+      if((String(month)).length==1)
+        month='0'+month;
+
+      return newdate.getFullYear() + '-' + month + '-' + day  + ' ' + newdate.getHours() + ":" + newdate.getMinutes() + ":" + newdate.getSeconds();
+    }
+
+    function response_time_graph(el, graph_data) {
+      return new Morris.Line({
+        element: el,
+        data: graph_data.reverse(),
+        xkey: 'date',
+        ykeys: ['millis'],
+        labels: ['Response time'],
+        postUnits: 'ms'
+      });
+    }
+
+    var api_responsetime = [
+      <% @stats[0]['responsetime'].each do |response_time| %>
+        {date: datetime_format("<%= response_time['datetime'] %>"), millis: "<%= response_time['value'] %>"},
+      <% end %>
+    ];
+
+    var apps_responsetime = [
+      <% @stats[1]['responsetime'].each do |response_time| %>
+        {date: datetime_format("<%= response_time['datetime'] %>"), millis: "<%= response_time['value'] %>"},
+      <% end %>
+    ];
+
+    response_time_graph('api_responsetime',api_responsetime)
+    response_time_graph('apps_responsetime',apps_responsetime)
+
+
+  </script>
+
+</div>

@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   around_filter :set_time_zone
   before_filter :ensure_site
+  before_action :set_locale
 
   private
 
@@ -30,6 +31,16 @@ class ApplicationController < ActionController::Base
   def ensure_site
     unless site.is_a?(Site)
       redirect_to setup_path(:step1)
+    end
+  end
+
+  def set_locale
+    parsed_locale = request.host.split('.').last
+    case parsed_locale
+      when 'bg' then I18n.locale = :bg
+      when 'dev' then I18n.locale = :bg
+    else
+      I18n.locale = :en  #this is now your 'default'
     end
   end
 

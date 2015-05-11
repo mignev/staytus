@@ -2,7 +2,7 @@ module ApplicationHelper
 
   def distance_of_time_in_words_to_now_with_direction(time)
     string = distance_of_time_in_words_to_now(time)
-    time > Time.now ? "in #{string}" : "#{string} ago"
+    time > Time.now ? "#{t('themes.default.in_for_time', :default => 'in')} #{string}" : "#{string} #{t('themes.default.ago', :default => 'ago')}"
   end
 
   def maintenance_status_tag(status)
@@ -31,8 +31,9 @@ module ApplicationHelper
   end
 
   def service_status_tag_for_status(status, options = {})
+    status_name = t("service_statuses.#{status.name.downcase.gsub(/\s+/, "_")}", :default => status.name)
     if status
-      content_tag :span, status.name, :class => "serviceStatusTag serviceStatusTag--#{status.status_type}", :style => "color:##{status.color}"
+      content_tag :span, status_name, :class => "serviceStatusTag serviceStatusTag--#{status.status_type}", :style => "color:##{status.color}"
     else
       content_tag :span, "Unknown", :class => "serviceStatusTag serviceStatusTag--unknown"
     end

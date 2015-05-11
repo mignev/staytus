@@ -1,0 +1,51 @@
+<% @page_title = "#{@maintenance.title} - #{@maintenance.start_at.strftime("%d/%m/%Y")}" %>
+<%= render 'page_header' %>
+
+<section class='issueDetail'>
+  <div class='container'>
+  <% unless @maintenance.services.empty? %>
+    <div class='issueDetail__services'>
+      <p><%= t("themes.default.affected_services", :default => 'Affected services') %>:</p>
+      <ul>
+        <% @maintenance.services.each do |service| %>
+        <li><%= service.name %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <h1 class='issueDetail__title'><%= @maintenance.title %></h1>
+  <p class='issueDetail__date'><%= t("themes.default.page_maintenance.scheduled_for", :default => 'Scheduled for') %> <%= @maintenance.start_at.strftime("%A #{@maintenance.start_at.day.ordinalize} %B %Y at %H:%M%P (#{site.time_zone})") %></p>
+  <p class='issueDetail__descriptionTitle'><%= t("themes.default.page_maintenance.schedule_description", :default => 'Schedule/description of work') %></p>
+  <p class='issueDetail__description'><%= @maintenance.description %></p>
+
+  <dl class='issueDetail__details'>
+    <dt><%= t("themes.default.page_maintenance.scheduled_start_time", :default => 'Scheduled start time') %></dt>
+    <dd><%= @maintenance.start_at.to_s(:long) %></dd>
+    <dt><%= t("themes.default.page_maintenance.scheduled_duration", :default => 'Duration') %></dt>
+    <dd><%= @maintenance.length_in_minutes_as_string %></dd>
+    <dt><%= t("themes.default.page_maintenance.scheduled_status", :default => 'Status') %></dt>
+    <dd><%= maintenance_status_tag @maintenance.status %></dd>
+
+  </dl>
+
+  <% unless @updates.empty? %>
+  <h2 class='issueUpdates__header'><%= t("themes.default.page_maintenance.updates", :default => 'Updates') %></h2>
+  <div class='issueUpdates'>
+    <% @updates.each do |update| %>
+    <div class='issueUpdates__update'>
+      <a name='update-<%=update.identifier%>'></a>
+      <p class='issueUpdates__text'>
+        <%= update.text %>
+      </p>
+      <p class='issueUpdates__meta'>
+        <%= t("themes.default.posted", :default => 'Posted') %> <%= time_tag update.created_at%>
+        <% if update.user %><%= t("themes.default.by", :default => 'by') %> <%= update.user.name %><% end %>
+      </p>
+    </div>
+    <% end %>
+    </div>
+  </div>
+  <% end %>
+
+</section>
