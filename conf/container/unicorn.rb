@@ -9,7 +9,7 @@ pid "#{app_dir}/tmp/unicorn.pid"
 stderr_path "#{app_dir}/log/unicorn.stderr.log"
 stdout_path "#{app_dir}/log/unicorn.stdout.log"
 
-worker_processes (rails_env == 'production' ? 2 : 2)
+worker_processes (rails_env == 'production' ? 1 : 2)
 
 listen "/tmp/unicorn.sock", :backlog => 128
 

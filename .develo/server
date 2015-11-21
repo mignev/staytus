@@ -39,7 +39,7 @@ fi
 
 if [ -f ~/confs/status.conf ];
 then
-   source ~/confs/status.conf;
+  source ~/confs/status.conf;
 else
   __develo_startapp_mysql_helper $APPNAME $NAMESPACE $DB_LOCAL_PORT
 fi

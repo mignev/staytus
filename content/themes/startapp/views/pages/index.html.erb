@@ -84,23 +84,24 @@
   </ul>
 
   <br/><br/><br/>
+  <% unless @stats.empty? %>
+    <div class='container'>
+      <p class='siteHeader__title'>
+        Графики и статистики
+      </p>
+      <br/>
 
-  <div class='container'>
-    <p class='siteHeader__title'>
-      Графики и статистики
-    </p>
-    <br/>
+      <div class="graphs">
+        <h2>API - Време за отговор (from outside BG)</h2>
+        <div id="api_responsetime" style="height: 250px;"></div>
+      </div>
 
-    <div class="graphs">
-      <h2>API - Време за отговор (from outside BG)</h2>
-      <div id="api_responsetime" style="height: 250px;"></div>
+      <div class="graphs">
+        <h2>Apps / Admin Panel - Време за отговор (from outside BG)</h2>
+        <div id="apps_responsetime" style="height: 250px;"></div>
+      </div>
     </div>
-
-    <div class="graphs">
-      <h2>Apps / Admin Panel - Време за отговор (from outside BG)</h2>
-      <div id="apps_responsetime" style="height: 250px;"></div>
-    </div>
-  </div>
+  <% end %>
 
 
   <style type="text/css">
@@ -148,20 +149,22 @@
       });
     }
 
-    var api_responsetime = [
-      <% @stats[0]['responsetime'].each do |response_time| %>
-        {date: datetime_format("<%= response_time['datetime'] %>"), millis: "<%= response_time['value'] %>"},
-      <% end %>
-    ];
+    <% unless @stats.empty? %>
+      var api_responsetime = [
+        <% @stats[0]['responsetime'].each do |response_time| %>
+          {date: datetime_format("<%= response_time['datetime'] %>"), millis: "<%= response_time['value'] %>"},
+        <% end %>
+      ];
 
-    var apps_responsetime = [
-      <% @stats[1]['responsetime'].each do |response_time| %>
-        {date: datetime_format("<%= response_time['datetime'] %>"), millis: "<%= response_time['value'] %>"},
-      <% end %>
-    ];
+      var apps_responsetime = [
+        <% @stats[1]['responsetime'].each do |response_time| %>
+          {date: datetime_format("<%= response_time['datetime'] %>"), millis: "<%= response_time['value'] %>"},
+        <% end %>
+      ];
 
-    response_time_graph('api_responsetime',api_responsetime)
-    response_time_graph('apps_responsetime',apps_responsetime)
+      response_time_graph('api_responsetime',api_responsetime)
+      response_time_graph('apps_responsetime',apps_responsetime)
+    <% end %>
 
 
   </script>
